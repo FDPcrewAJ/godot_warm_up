@@ -31,15 +31,34 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+	
+
 
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
+	# Get the input direction in which player is moving 
+	# (in Vector 2: 
+	# Left: (-1, 0)
+	# Right: (1, 0)
+	# Forward: (0, -1)
+	# Backward (0, 1)
+	# when moving diagonally, you get a fancy decimal 0.707 something)
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
+	print(input_dir)
+	
+	# Direction varible to store x and z direction that the player is moving
+	# (Is not the players actual velocity, that is different and gets put in later)
+	# Lerp: goes from first input to second input smoothly
+	# [Input 1]: Current direction of the player, changes as the player moves. (in Vector3)
+	# [Input 2]: Mouse position of the player (transform.basis), gets where the player is looking, (in Vector3)
+	# so that we know what direction we need to move in. This is then multiplied by a Vector3 conversion
+	# of the input direction, with y being 0 as we are not moving vertical.
+	# All of that is then normalized, which sets the distance of the vector3 to one.
+	# [Input 3]: The rate of change is the set lerp speed, effects how slowly or quickly you speed up,
+	# multiplied by delta so that it sticks with frame time and does not go out of sync.
 	direction = lerp(direction,(transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed)
 	
 	if Input.is_action_pressed("sprint"):
