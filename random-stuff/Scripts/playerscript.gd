@@ -47,7 +47,6 @@ func _physics_process(delta: float) -> void:
 	# Backward (0, 1)
 	# when moving diagonally, you get a fancy decimal 0.707 something)
 	var input_dir := Input.get_vector("left", "right", "forward", "backward")
-	print(input_dir)
 	
 	# Direction varible to store x and z direction that the player is moving
 	# (Is not the players actual velocity, that is different and gets put in later)
